@@ -7,12 +7,12 @@ import { UpdateGrupoDto } from './dto/update-grupo.dto';
 export class GruposController {
   constructor(private readonly gruposService: GruposService) {}
 
-  @Post("post")
+  @Post('post')
   create(@Body() createGrupoDto: CreateGrupoDto) {
     return this.gruposService.create(createGrupoDto);
   }
 
-  @Get("getAll")
+  @Get('getAll')
   findAll() {
     return this.gruposService.findAll();
   }

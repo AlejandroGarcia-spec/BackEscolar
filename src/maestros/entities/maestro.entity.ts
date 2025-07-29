@@ -1,29 +1,40 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Grupochido } from "src/grupos/entities/grupo.entity";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Grupochido } from 'src/grupos/entities/grupo.entity';
 
 @Entity()
 export class Maestro {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    nombre: string;
+  @Column()
+  nombre: string;
 
-    @Column()
-    apellido: string;
+  @Column()
+  apellido: string;
 
-    @Column()
-    telefono: number;
+  @Column()
+  telefono: number;
 
-    @Column()
-    correo: string;
+  @Column()
+  correo: string;
 
-    @Column({ select: false })
-    contrasena: string;
+  @Column({ select: false })
+  contrasena: string;
 
-    @ManyToOne(() => Grupochido, (grupo) => grupo.maestros)
-    grupo: Grupochido;
+  @ManyToOne(() => Grupochido, (grupo) => grupo.maestros)
+  grupo: Grupochido;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column({ type: 'longtext', nullable: true })
+  imagenBase64: string;
+  @Column()
+  grupoId: number; // <-- campo explícito de FK
 }

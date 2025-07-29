@@ -1,29 +1,40 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateMaestroDto } from './create-maestro.dto';
-import { IsEmail, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { Grupochido } from 'src/grupos/entities/grupo.entity';
 
-export class UpdateMaestroDto  {
-    @IsString()
-    @IsOptional()
-    nombre: string;
+export class UpdateMaestroDto {
+  @IsString()
+  @IsNotEmpty()
+  nombre: string;
 
-   @IsString()
-    @IsOptional()
-    apellido: string;
+  @IsString()
+  @IsNotEmpty()
+  apellido: string;
 
-    @IsOptional()
-    @IsNumber()
-    telefono: number;
+  @IsNotEmpty()
+  @IsNumber()
+  telefono: number;
 
-    @IsString()
-    @IsOptional()
-    @IsEmail()
-    correo: string;
+  @IsString()
+  @IsNotEmpty()
+  @IsEmail()
+  correo: string;
 
-    @IsString()
-    @IsOptional()
-    contrasena: string;
-    @IsOptional()
-    grupo: Grupochido;
+  @IsString()
+  @IsNotEmpty()
+  contrasena: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  grupoId: number; // <-- Aquí tienes un decorador para string pero es number en el tipo
+  @IsOptional()
+  @IsString()
+  imagenBase64?: string;
 }

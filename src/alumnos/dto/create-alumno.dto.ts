@@ -1,22 +1,29 @@
-import { IsNotEmpty, IsString } from "class-validator";
-import { Grupochido } from "src/grupos/entities/grupo.entity";
-import { Tutore } from "src/tutores/entities/tutore.entity";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateAlumnoDto {
-    @IsString()
-    @IsNotEmpty()
-    nombre: string;
+  @IsString()
+  @IsNotEmpty()
+  nombre: string;
 
-    @IsString()
-    @IsNotEmpty()
-    apellidoP: string;
+  @IsString()
+  @IsNotEmpty()
+  apellido: string;
 
-    @IsString()
-    @IsNotEmpty()
-    apellidoM: string;
-    @IsNotEmpty()
-    tutor:Tutore;
-    @IsNotEmpty()
-    grupo:Grupochido;
+  @IsOptional()
+  @IsString()
+  correo?: string;
 
+  @IsOptional()
+  @IsString()
+  telefono?: string;
+
+  @IsOptional()
+  @IsString()
+  imagenBase64?: string;
+  @IsNumber()
+  @IsNotEmpty()
+  grupoId: number; // <-- Aquí tienes un decorador para string pero es number en el tipo
+  @IsNotEmpty()
+  @IsNumber()
+  tutorId?: number;
 }

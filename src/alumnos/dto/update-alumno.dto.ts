@@ -1,24 +1,29 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateAlumnoDto } from './create-alumno.dto';
-import { IsOptional, IsString } from 'class-validator';
-import { Grupochido } from 'src/grupos/entities/grupo.entity';
-import { Tutore } from 'src/tutores/entities/tutore.entity';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class UpdateAlumnoDto  {
-    @IsString()
-    @IsOptional()
-    nombre: string;
+export class UpdateAlumnoDto {
+  @IsString()
+  @IsNotEmpty()
+  nombre: string;
 
-    @IsString()
-    @IsOptional()
-    apellidoP: string;
+  @IsString()
+  @IsNotEmpty()
+  apellido: string;
 
-    @IsString()
-    @IsOptional()
-    apellidoM: string;
+  @IsOptional()
+  @IsString()
+  correo?: string;
 
-    @IsOptional()
-    tutor:Tutore;
-    @IsOptional()
-    grupo:Grupochido;
+  @IsOptional()
+  @IsString()
+  telefono?: string;
+
+  @IsOptional()
+  @IsString()
+  imagenBase64?: string;
+
+  @IsNotEmpty()
+  grupoId: number;
+  @IsNotEmpty()
+  @IsNumber()
+  tutorId?: number;
 }

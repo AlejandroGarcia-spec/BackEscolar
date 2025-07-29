@@ -1,27 +1,27 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateTutoreDto } from './create-tutore.dto';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
-export class UpdateTutoreDto  {
-        @IsString()
-        @IsOptional()
-        nombre: string;
-    
-        @IsString()
-        @IsOptional()
-        apellido: string;
+export class UpdateTutoreDto {
+  @IsString()
+  @IsNotEmpty()
+  nombre: string;
 
-        @IsOptional()
-        @IsNumber()
-        telefono: number;
-    
-        @IsString()
-        @IsOptional()
-        parentesco: string;
-        @IsString()
-        @IsOptional()
-        email: string;
-        @IsString()
-        @IsOptional()
-        contrasena: string;
+  @IsString()
+  @IsNotEmpty()
+  apellido: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  telefono: number;
+
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  contrasena: string;
+
+  @IsOptional()
+  @IsString()
+  imagenBase64?: string;
 }

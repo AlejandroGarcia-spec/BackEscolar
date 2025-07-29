@@ -3,20 +3,30 @@ import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Alummno } from './entities/alumno.entity';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
 export class AlumnosService {
   @InjectRepository(Alummno)
   private readonly alumnoRepository: Repository<Alummno>;
-
   async create(createAlumnoDto: CreateAlumnoDto) {
-    const alumno = this.alumnoRepository.create(createAlumnoDto);
+    const { grupoId, tutorId, ...rest } = createAlumnoDto;
+
+    const alumnoData: DeepPartial<Alummno> = {
+      ...rest,
+      grupo: { id: grupoId },
+    };
+
+    if (tutorId) {
+      alumnoData.tutor = { id: tutorId };
+    }
+
+    const alumno = this.alumnoRepository.create(alumnoData);
     return await this.alumnoRepository.save(alumno);
   }
 
-  async findAll() {
-    return await this.alumnoRepository.find();
+  findAll() {
+    return this.alumnoRepository.find({ relations: ['grupo'] });
   }
 
   async findOne(id: number) {
@@ -26,24 +36,21 @@ export class AlumnosService {
     });
   }
   async findByTutor(tutorId: number) {
-  return await this.alumnoRepository.find({
-    where: {
-      tutor: { id: tutorId },
-    },
-    relations: ['tutor', 'grupo'],
-  });
+    return await this.alumnoRepository.find({
+      where: {
+        tutor: { id: tutorId },
+      },
+      relations: ['tutor', 'grupo'],
+    });
   }
   async findByGrupo(grupoId: number) {
-  return await this.alumnoRepository.find({
-    where: {
-      grupo: { id: grupoId },
-    },
-    relations: ['tutor', 'grupo'],
-  });
-}
-
-
-
+    return await this.alumnoRepository.find({
+      where: {
+        grupo: { id: grupoId },
+      },
+      relations: ['tutor', 'grupo'],
+    });
+  }
 
   async update(id: number, updateAlumnoDto: UpdateAlumnoDto) {
     await this.alumnoRepository.update(id, updateAlumnoDto);
