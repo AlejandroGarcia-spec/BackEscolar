@@ -30,4 +30,20 @@ export class TutoresService {
   async remove(id: number) {
     return await this.tutoreRepository.delete(id);
   }
+  async validateTutor(
+    correo: string,
+    contrasena: string,
+  ): Promise<Tutore | null> {
+    const tutor = await this.tutoreRepository.findOne({ where: { correo } });
+    if (!tutor) return null;
+
+    // Aquí compara contraseñas directamente (en producción usa bcrypt)
+    if (tutor.contrasena === contrasena) {
+      return tutor;
+    }
+    return null;
+  }
+  async findByCorreo(correo: string): Promise<Tutore | null> {
+    return await this.tutoreRepository.findOne({ where: { correo } });
+  }
 }

@@ -17,7 +17,7 @@ export class Tutore {
   @Column()
   telefono: number;
   @Column()
-  email: string;
+  correo: string;
   @Column()
   contrasena: string;
   @OneToMany(() => Alummno, (alumno) => alumno.tutor)

@@ -36,4 +36,26 @@ export class MaestrosService {
   remove(id: number) {
     return this.maestroRepository.delete(id);
   }
+  async validateMaestro(
+    correo: string,
+    contrasena: string,
+  ): Promise<Maestro | null> {
+    const maestro = await this.maestroRepository
+      .createQueryBuilder('maestro')
+      .addSelect('maestro.contrasena')
+      .where('maestro.correo = :correo', { correo })
+      .getOne();
+
+    if (!maestro) return null;
+
+    if (maestro.contrasena === contrasena) {
+      return maestro;
+    }
+
+    return null;
+  }
+
+  async findByCorreo(correo: string): Promise<Maestro | null> {
+    return await this.maestroRepository.findOne({ where: { correo } });
+  }
 }

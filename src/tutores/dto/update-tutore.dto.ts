@@ -15,7 +15,7 @@ export class UpdateTutoreDto {
 
   @IsString()
   @IsNotEmpty()
-  email: string;
+  correo: string;
 
   @IsString()
   @IsNotEmpty()

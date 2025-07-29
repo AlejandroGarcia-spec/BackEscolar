@@ -14,7 +14,7 @@ export class CreateTutoreDto {
   telefono: number;
   @IsString()
   @IsNotEmpty()
-  email: string;
+  correo: string;
   @IsString()
   @IsNotEmpty()
   contrasena: string;
