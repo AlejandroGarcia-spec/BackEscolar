@@ -1,4 +1,5 @@
 import { Alummno } from "src/alumnos/entities/alumno.entity";
+import { Conocido } from "src/conocidos/entities/conocido.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class Tutore {
@@ -16,6 +17,10 @@ export class Tutore {
     email: string;
     @Column()
     contrasena: string;
+    
+    @OneToMany(()=>Conocido,(conocido)=>conocido.tutor)
+    conocido:Conocido
+
     @OneToMany(()=>Alummno,(alumno)=>alumno.tutor)
     alumno:Alummno
 
