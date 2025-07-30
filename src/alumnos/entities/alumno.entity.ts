@@ -1,5 +1,6 @@
 import { Entrada } from 'src/entradas/entities/entrada.entity';
 import { Grupochido } from 'src/grupos/entities/grupo.entity';
+import { Salida } from 'src/salidas/entities/salida.entity';
 import { Tutore } from 'src/tutores/entities/tutore.entity';
 import {
   Column,
@@ -10,6 +11,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
 @Entity()
 export class Alummno {
   @PrimaryGeneratedColumn()
@@ -41,10 +43,13 @@ export class Alummno {
   grupo: Grupochido;
 
   @Column()
-  grupoId: number; // <-- campo explícito de FK
+  grupoId: number;
 
   @OneToMany(() => Entrada, (entrada) => entrada.alumno)
   entrada: Entrada[];
+
+  @OneToMany(() => Salida, (salida) => salida.alumno)
+  salida: Salida[];
 
   @CreateDateColumn()
   createdAt: Date;
