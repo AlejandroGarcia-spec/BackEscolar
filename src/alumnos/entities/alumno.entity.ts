@@ -1,33 +1,56 @@
-import { Entrada } from "src/entradas/entities/entrada.entity";
-import { Grupochido } from "src/grupos/entities/grupo.entity";
-import { Salida } from "src/salidas/entities/salida.entity";
-import { Tutore } from "src/tutores/entities/tutore.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entrada } from 'src/entradas/entities/entrada.entity';
+import { Grupochido } from 'src/grupos/entities/grupo.entity';
+import { Salida } from 'src/salidas/entities/salida.entity';
+import { Tutore } from 'src/tutores/entities/tutore.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
 @Entity()
 export class Alummno {
-    @PrimaryGeneratedColumn()
-    id: number;
-    @Column()
-    nombre: string;
-    @Column()
-    apellidoP: string;
-    @Column()
-    apellidoM: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @ManyToOne(()=>Tutore,(tutore)=>tutore.alumno)
-    tutor:Tutore
+  @Column()
+  nombre: string;
 
-    @ManyToOne(()=>Grupochido,(grupo)=>grupo.alumno)
-    grupo:Grupochido
-    
-    @OneToMany(()=>Entrada,(entrada)=>entrada.alumno)
-    entrada:Entrada
+  @Column()
+  apellido: string;
 
-    @OneToMany(()=>Salida,(salida)=>salida.alumno)
-    salida:Salida
+  @Column()
+  correo: string;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @Column()
+  telefono: string;
 
+  @Column({ type: 'longtext', nullable: true })
+  imagenBase64: string;
 
+  @Column({ nullable: true })
+  tutorId: number;
+
+  @ManyToOne(() => Tutore, (tutor) => tutor.alumno, { eager: true })
+  @JoinColumn({ name: 'tutorId' })
+  tutor: Tutore;
+
+  @ManyToOne(() => Grupochido, (grupo) => grupo.alumnos, { nullable: false })
+  grupo: Grupochido;
+
+  @Column()
+  grupoId: number;
+
+  @OneToMany(() => Entrada, (entrada) => entrada.alumno)
+  entrada: Entrada[];
+
+  @OneToMany(() => Salida, (salida) => salida.alumno)
+  salida: Salida[];
+
+  @CreateDateColumn()
+  createdAt: Date;
 }

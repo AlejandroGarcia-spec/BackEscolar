@@ -1,34 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTutoreDto } from './dto/create-tutore.dto';
 import { UpdateTutoreDto } from './dto/update-tutore.dto';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Tutore } from './entities/tutore.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class TutoresService {
-@InjectRepository(Tutore)
-private tutoreRepository: Repository<Tutore>;
+  @InjectRepository(Tutore)
+  private readonly tutoreRepository: Repository<Tutore>;
 
-async create(createTutoreDto: CreateTutoreDto) {
-  const tutore = this.tutoreRepository.create(createTutoreDto);
-  return await this.tutoreRepository.save(tutore);
-}
+  async create(createTutoreDto: CreateTutoreDto) {
+    const tutore = this.tutoreRepository.create(createTutoreDto);
+    return await this.tutoreRepository.save(tutore);
+  }
 
-async findAll() {
-  return await this.tutoreRepository.find();
-}
+  async findAll() {
+    return await this.tutoreRepository.find();
+  }
 
-async findOne(id: number) {
-  return await this.tutoreRepository.findOneBy({ id });
-}
+  async findOne(id: number) {
+    return await this.tutoreRepository.findOneBy({ id });
+  }
 
-async update(id: number, updateTutoreDto: UpdateTutoreDto) {
-  return await this.tutoreRepository.update(id, updateTutoreDto);
-}
+  async update(id: number, updateTutoreDto: UpdateTutoreDto) {
+    return await this.tutoreRepository.update(id, updateTutoreDto);
+  }
 
-async remove(id: number) {
-  return await this.tutoreRepository.delete(id);
-}
+  async remove(id: number) {
+    return await this.tutoreRepository.delete(id);
+  }
+  async validateTutor(
+    correo: string,
+    contrasena: string,
+  ): Promise<Tutore | null> {
+    const tutor = await this.tutoreRepository.findOne({ where: { correo } });
+    if (!tutor) return null;
 
+    // Aquí compara contraseñas directamente (en producción usa bcrypt)
+    if (tutor.contrasena === contrasena) {
+      return tutor;
+    }
+    return null;
+  }
+  async findByCorreo(correo: string): Promise<Tutore | null> {
+    return await this.tutoreRepository.findOne({ where: { correo } });
+  }
 }
