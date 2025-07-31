@@ -11,6 +11,7 @@ import { MaestrosModule } from './maestros/maestros.module';
 import { EntradasModule } from './entradas/entradas.module';
 import { AdministradoresModule } from './administradores/administradores.module';
 import { ConocidosModule } from './conocidos/conocidos.module';
+import { QrModule } from './qr/qr.module';
 @Module({
   imports: [ TypeOrmModule.forRoot({
     type: 'mysql',
@@ -21,7 +22,7 @@ import { ConocidosModule } from './conocidos/conocidos.module';
     database: 'escuelita2',
     synchronize: true,
     autoLoadEntities: true,
-  }), GruposModule, TutoresModule, HorariosModule, SalidasModule, AlumnosModule, MaestrosModule, EntradasModule, AdministradoresModule, ConocidosModule],
+  }), GruposModule, TutoresModule, HorariosModule, SalidasModule, AlumnosModule, MaestrosModule, EntradasModule, AdministradoresModule, ConocidosModule, QrModule],
   controllers: [AppController],
   providers: [AppService],
 })
