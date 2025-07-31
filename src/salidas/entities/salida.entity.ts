@@ -10,7 +10,7 @@ export class Salida {
     alumno:Alummno
 
     @CreateDateColumn()
-    DateEntrada: Date;
+    Date: Date;
     
     @Column()
     nombre_Recoge: string;
