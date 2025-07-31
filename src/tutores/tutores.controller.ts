@@ -12,6 +12,7 @@ import {
 import { TutoresService } from './tutores.service';
 import { CreateTutoreDto } from './dto/create-tutore.dto';
 import { UpdateTutoreDto } from './dto/update-tutore.dto';
+import { Tutore } from './entities/tutore.entity';
 
 @Controller('tutores')
 export class TutoresController {
@@ -23,8 +24,8 @@ export class TutoresController {
   }
 
   @Get()
-  findAll() {
-    return this.tutoresService.findAll();
+  async findAll(): Promise<Tutore[]> {
+    return this.tutoresService.findAllWithAlumnos();
   }
 
   @Get(':id')
@@ -32,7 +33,7 @@ export class TutoresController {
     return this.tutoresService.findOne(+id);
   }
 
-  @Patch(':id') // ← acepta un id como parámetro
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updateTutoreDto: UpdateTutoreDto) {
     return this.tutoresService.update(+id, updateTutoreDto);
   }
@@ -54,7 +55,7 @@ export class TutoresController {
     if (!tutor) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
-    return { tutor }; // o devuelve token si usas JWT
+    return { tutor };
   }
   @Get('perfil/:correo')
   async getPerfil(@Param('correo') correo: string) {

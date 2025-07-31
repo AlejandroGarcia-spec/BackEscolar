@@ -36,8 +36,6 @@ export class TutoresService {
   ): Promise<Tutore | null> {
     const tutor = await this.tutoreRepository.findOne({ where: { correo } });
     if (!tutor) return null;
-
-    // Aquí compara contraseñas directamente (en producción usa bcrypt)
     if (tutor.contrasena === contrasena) {
       return tutor;
     }
@@ -45,5 +43,10 @@ export class TutoresService {
   }
   async findByCorreo(correo: string): Promise<Tutore | null> {
     return await this.tutoreRepository.findOne({ where: { correo } });
+  }
+  findAllWithAlumnos(): Promise<Tutore[]> {
+    return this.tutoreRepository.find({
+      relations: ['alumno'],
+    });
   }
 }

@@ -35,7 +35,10 @@ export class Alummno {
   @Column({ nullable: true })
   tutorId: number;
 
-  @ManyToOne(() => Tutore, (tutor) => tutor.alumno, { eager: true })
+  @ManyToOne(() => Tutore, (tutor) => tutor.alumno, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   @JoinColumn({ name: 'tutorId' })
   tutor: Tutore;
 
