@@ -50,7 +50,7 @@ export class MaestrosController {
     if (!maestro) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
-    return { maestro }; // o devuelve token si usas JWT
+    return { maestro }; 
   }
   @Get('perfil/:correo')
   async getPerfil(@Param('correo') correo: string) {

@@ -33,7 +33,7 @@ export class UpdateMaestroDto {
 
   @IsNumber()
   @IsNotEmpty()
-  grupoId: number; // <-- Aquí tienes un decorador para string pero es number en el tipo
+  grupoId: number; 
   @IsOptional()
   @IsString()
   imagenBase64?: string;
