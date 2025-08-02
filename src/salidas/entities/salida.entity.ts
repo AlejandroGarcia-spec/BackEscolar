@@ -1,13 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Alummno } from "src/alumnos/entities/alumno.entity";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Salida {
     @PrimaryGeneratedColumn()
     id: number;
+
+    @ManyToOne(()=>Alummno,(alumno)=>alumno.salida)
+    alumno:Alummno
+
+    @CreateDateColumn()
+    DateEntrada: Date;
+    
     @Column()
-    fecha: Date;
-    @Column()
-    horaSalida: string;
-    @Column()
-    nanbre_Recoge: string;
+    nombre_Recoge: string;
 }

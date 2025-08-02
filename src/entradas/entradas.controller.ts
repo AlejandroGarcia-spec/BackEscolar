@@ -15,27 +15,27 @@ import { UpdateEntradaDto } from './dto/update-entrada.dto';
 export class EntradasController {
   constructor(private readonly entradasService: EntradasService) {}
 
-  @Post()
+  @Post('new')
   create(@Body() createEntradaDto: CreateEntradaDto) {
     return this.entradasService.create(createEntradaDto);
   }
 
-  @Get()
+  @Get('get')
   findAll() {
     return this.entradasService.findAll();
   }
 
-  @Get(':id')
+  @Get('get/:id')
   findOne(@Param('id') id: string) {
     return this.entradasService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateEntradaDto: UpdateEntradaDto) {
     return this.entradasService.update(+id, updateEntradaDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.entradasService.remove(+id);
   }
