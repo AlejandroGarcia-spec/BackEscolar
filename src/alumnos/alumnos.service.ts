@@ -1,14 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Alummno } from './entities/alumno.entity';
 import { DeepPartial, Repository } from 'typeorm';
+import { Maestro } from 'src/maestros/entities/maestro.entity';
+import { Grupochido } from 'src/grupos/entities/grupo.entity';
 
 @Injectable()
 export class AlumnosService {
-  @InjectRepository(Alummno)
-  private readonly alumnoRepository: Repository<Alummno>;
+  constructor(
+    @InjectRepository(Alummno)
+    private readonly alumnoRepository: Repository<Alummno>,
+
+    @InjectRepository(Maestro)
+    private readonly maestroRepository: Repository<Maestro>,
+
+    @InjectRepository(Grupochido)
+    private readonly grupoRepository: Repository<Grupochido>,
+  ) {}
+
   async create(createAlumnoDto: CreateAlumnoDto) {
     const { grupoId, tutorId, ...rest } = createAlumnoDto;
 
@@ -60,5 +71,26 @@ export class AlumnosService {
   async remove(id: number) {
     await this.alumnoRepository.delete(id);
     return `This action removes a #${id} alumno`;
+  }
+  async obtenerPorMaestro(maestroId: number) {
+    const maestro = await this.maestroRepository.findOne({
+      where: { id: maestroId },
+      relations: ['grupo'],
+    });
+
+    if (!maestro) {
+      throw new NotFoundException('Maestro no encontrado');
+    }
+
+    const grupo = await this.grupoRepository.findOne({
+      where: { id: maestro.grupo.id },
+      relations: ['alumnos', 'alumnos.tutor'], // <- AQUÍ ESTÁ EL CAMBIO
+    });
+
+    if (!grupo) {
+      throw new NotFoundException('Grupo no encontrado para el maestro');
+    }
+
+    return grupo.alumnos;
   }
 }

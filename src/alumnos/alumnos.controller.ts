@@ -49,4 +49,8 @@ export class AlumnosController {
   remove(@Param('id') id: string) {
     return this.alumnosService.remove(+id);
   }
+  @Get('maestro/:idMaestro/alumnos')
+  async obtenerAlumnosPorMaestro(@Param('idMaestro') idMaestro: number) {
+    return this.alumnosService.obtenerPorMaestro(idMaestro);
+  }
 }

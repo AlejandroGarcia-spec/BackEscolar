@@ -1,72 +1,74 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateEntradaDto } from './dto/create-entrada.dto';
-import { UpdateEntradaDto } from './dto/update-entrada.dto';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
+import { CreateEntradaDto } from './dto/create-entrada.dto';
 import { Entrada } from './entities/entrada.entity';
 import { Alummno } from 'src/alumnos/entities/alumno.entity';
+import { UpdateEntradaDto } from './dto/update-entrada.dto';
 
 @Injectable()
 export class EntradasService {
   constructor(
     @InjectRepository(Entrada)
-    private _entradaRepo: Repository<Entrada>,
+    private readonly entradaRepo: Repository<Entrada>,
 
     @InjectRepository(Alummno)
-    private _alumnoRepo: Repository<Alummno>,
-  ) { }
+    private readonly alumnoRepo: Repository<Alummno>,
+  ) {}
 
-  async create(createEntradaDto: CreateEntradaDto): Promise<Entrada> {
-    const alumno = await this._alumnoRepo.findOne({
+  async create(createEntradaDto: CreateEntradaDto) {
+    const alumno = await this.alumnoRepo.findOne({
       where: { id: createEntradaDto.alumnoId },
     });
-
     if (!alumno) {
       throw new NotFoundException('Alumno no encontrado');
     }
 
-    const entrada = this._entradaRepo.create({
-      alumno,
+    const inicioDia = new Date();
+    inicioDia.setHours(0, 0, 0, 0);
+    const finDia = new Date();
+    finDia.setHours(23, 59, 59, 999);
+
+    const yaExiste = await this.entradaRepo.findOne({
+      where: {
+        alumno: { id: createEntradaDto.alumnoId },
+        DateEntrada: Between(inicioDia, finDia),
+      },
     });
 
-    return this._entradaRepo.save(entrada);
-  }
-
-  findAll(): Promise<Entrada[]> {
-    return this._entradaRepo.find({ relations: ['alumno'] });
-  }
-
-  async findOne(id: number): Promise<Entrada> {
-    const entrada = await this._entradaRepo.findOne({
-      where: { id },
-      relations: ['alumno'],
-    });
-
-    if (!entrada) {
-      throw new NotFoundException('Entrada no encontrada');
+    if (yaExiste) {
+      throw new ConflictException(
+        'El alumno ya tiene una entrada registrada hoy.',
+      );
     }
 
-    return entrada;
+    const entrada = this.entradaRepo.create({ alumno });
+    return this.entradaRepo.save(entrada);
+  }
+  findAll() {
+    return this.entradaRepo.find({ relations: ['alumno'] });
   }
 
-  async update(id: number, updateEntradaDto: UpdateEntradaDto): Promise<Entrada> {
-    const entrada = await this.findOne(id);
-
-    if (updateEntradaDto.alumnoId) {
-      const alumno = await this._alumnoRepo.findOne({
-        where: { id: updateEntradaDto.alumnoId },
-      });
-      if (!alumno) throw new NotFoundException('Alumno no encontrado');
-      entrada.alumno = alumno;
-    }
-
-    return this._entradaRepo.save(entrada);
+  findOne(id: number) {
+    return this.entradaRepo.findOne({ where: { id }, relations: ['alumno'] });
   }
 
-  async remove(id: number): Promise<void> {
-    const entrada = await this.findOne(id);
-    await this._entradaRepo.remove(entrada);
+  async update(id: number, updateEntradaDto: UpdateEntradaDto) {
+    const entrada = await this.entradaRepo.findOneBy({ id });
+    if (!entrada) throw new NotFoundException('Entrada no encontrada');
+
+    Object.assign(entrada, updateEntradaDto);
+    return this.entradaRepo.save(entrada);
+  }
+
+  async remove(id: number) {
+    const entrada = await this.entradaRepo.findOneBy({ id });
+    if (!entrada) throw new NotFoundException('Entrada no encontrada');
+
+    return this.entradaRepo.remove(entrada);
   }
 }
-
-
