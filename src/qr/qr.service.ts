@@ -15,8 +15,9 @@ export class QRService {
   ) { }
 
   async generarQR(dto: CreateQrDto) {
-    const alumno = await this.alumnosService.findOne(dto.alumnoId);
+    const alumno = await this.alumnosService.findOneByIdAndTutor(dto.alumnoId, dto.tutorId);
     const conocido = await this.conocidosService.findOne(dto.conocidoId);
+
 
     if (!alumno || !conocido) {
       throw new NotFoundException('Alumno o conocido no encontrado');
@@ -28,6 +29,13 @@ export class QRService {
       nombreConocido: conocido.nombre,
       fotoConocido: conocido.foto,
       nombreAlumno: alumno.nombre,
+      nombreTutor: alumno.tutor.nombre,
+      grupo: alumno.grupo
+        ? {
+          idGrupo: alumno.grupo.id,
+          nombreGrupo: alumno.grupo.nombre,
+        }
+        : null,
     };
 
     const token = this.jwtService.sign(payload, { expiresIn: '5m' });
@@ -36,34 +44,34 @@ export class QRService {
   }
 
   async obtenerDatosParaQR(tutorId: number, alumnoId: number) {
-  const conocidos = await this.conocidosService.findByTutorId(tutorId);
+    const conocidos = await this.conocidosService.findByTutorId(tutorId);
 
-  if (!conocidos || conocidos.length === 0) {
-    throw new NotFoundException('No se encontraron conocidos para este tutor');
+    if (!conocidos || conocidos.length === 0) {
+      throw new NotFoundException('No se encontraron conocidos para este tutor');
+    }
+
+    const alumno = await this.alumnosService.findOneByIdAndTutor(alumnoId, tutorId);
+
+
+    if (!alumno) {
+      throw new NotFoundException('No se encontró el alumno relacionado con este tutor');
+    }
+
+    return conocidos.map(k => ({
+      idConocido: k.id,
+      nombreConocido: k.nombre,
+      fotoConocido: k.foto,
+      alumno: {
+        idAlumno: alumno.id,
+        nombreAlumno: alumno.nombre,
+        nombreTutor: alumno.tutor.nombre,
+        grupo: alumno.grupo ? {
+          idGrupo: alumno.grupo.id,
+          nombreGrupo: alumno.grupo.nombre,
+        } : null,
+      },
+    }));
   }
-
-  const alumno = await this.alumnosService.findOneByIdAndTutor(alumnoId, tutorId);
-
-
-  if (!alumno) {
-    throw new NotFoundException('No se encontró el alumno relacionado con este tutor');
-  }
-
-return conocidos.map(k => ({
-    idConocido: k.id,
-    nombreConocido: k.nombre,
-    fotoConocido: k.foto,
-    alumno: {
-      idAlumno: alumno.id,
-      nombreAlumno: alumno.nombre,
-      nombreTutor: alumno.tutor.nombre,
-      grupo: alumno.grupo ? {
-        idGrupo: alumno.grupo.id,
-        nombreGrupo: alumno.grupo.nombre,
-      } : null,
-    },
-  }));
-}
 
 
   async decodificarQR(token: string) {

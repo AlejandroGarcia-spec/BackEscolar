@@ -5,5 +5,8 @@ export class CreateQrDto {
   alumnoId: number;
 
   @IsNumber()
+  tutorId: number;
+
+  @IsNumber()
   conocidoId: number;
 }
