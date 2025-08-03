@@ -48,6 +48,13 @@ export class ConocidosService {
     return conocido;
   }
 
+  async findByTutorId(tutorId: number) {
+  return this._conocidoRepo.find({
+    where: { tutor: { id: tutorId } },
+    relations: ['tutor'],
+  });
+}
+
   async update(id: number, dto: UpdateConocidoDto): Promise<Conocido> {
     const conocido = await this.findOne(id);
 

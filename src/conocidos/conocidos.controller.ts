@@ -5,7 +5,7 @@ import { UpdateConocidoDto } from './dto/update-conocido.dto';
 
 @Controller('conocidos')
 export class ConocidosController {
-  constructor(private readonly conocidosService: ConocidosService) {}
+  constructor(private readonly conocidosService: ConocidosService) { }
 
   @Post('new')
   create(@Body() createConocidoDto: CreateConocidoDto) {
@@ -20,6 +20,11 @@ export class ConocidosController {
   @Get('get/:id')
   findOne(@Param('id') id: string) {
     return this.conocidosService.findOne(+id);
+  }
+
+  @Get('conocidos/tutor/:tutorId')
+  findConocidosByTutor(@Param('tutorId') tutorId: number) {
+    return this.conocidosService.findByTutorId(tutorId);
   }
 
   @Patch('update/:id')

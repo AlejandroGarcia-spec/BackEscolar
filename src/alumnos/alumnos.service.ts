@@ -52,6 +52,17 @@ export class AlumnosService {
     });
   }
 
+  async findOneByIdAndTutor(alumnoId: number, tutorId: number) {
+    return this.alumnoRepository.findOne({
+      where: {
+        id: alumnoId,
+        tutor: { id: tutorId },
+      },
+      relations: ['grupo', 'tutor'],
+    });
+  }
+
+
   async update(id: number, updateAlumnoDto: UpdateAlumnoDto) {
     await this.alumnoRepository.update(id, updateAlumnoDto);
     return await this.alumnoRepository.findOneBy({ id });
