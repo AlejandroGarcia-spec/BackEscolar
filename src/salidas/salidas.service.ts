@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Salida } from './entities/salida.entity';
 import { CreateSalidaDto } from './dto/create-salida.dto';
 import { UpdateSalidaDto } from './dto/update-salida.dto';
 
 @Injectable()
 export class SalidasService {
+  constructor(
+    @InjectRepository(Salida)
+    private _salidaRepo: Repository<Salida>,
+  ) {}
+
   create(createSalidaDto: CreateSalidaDto) {
-    return 'This action adds a new salida';
+    const salida = this._salidaRepo.create(createSalidaDto);
+    return this._salidaRepo.save(salida);
   }
 
   findAll() {
-    return `This action returns all salidas`;
+    return this._salidaRepo.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} salida`;
+    return this._salidaRepo.findOne({ where: { id } });
   }
 
   update(id: number, updateSalidaDto: UpdateSalidaDto) {
-    return `This action updates a #${id} salida`;
+    return this._salidaRepo.update(id, updateSalidaDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} salida`;
+    return this._salidaRepo.delete(id);
   }
 }

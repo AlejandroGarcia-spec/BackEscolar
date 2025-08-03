@@ -9,5 +9,7 @@ import { Grupochido } from 'src/grupos/entities/grupo.entity';
   imports: [TypeOrmModule.forFeature([Alummno, Maestro, Grupochido])],
   controllers: [AlumnosController],
   providers: [AlumnosService],
+  exports: [AlumnosService],
+
 })
 export class AlumnosModule {}
