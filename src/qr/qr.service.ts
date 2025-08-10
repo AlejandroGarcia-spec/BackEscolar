@@ -14,34 +14,7 @@ export class QRService {
     private alumnosService: AlumnosService,
   ) { }
 
-  async generarQR(dto: CreateQrDto) {
-    const alumno = await this.alumnosService.findOneByIdAndTutor(dto.alumnoId, dto.tutorId);
-    const conocido = await this.conocidosService.findOne(dto.conocidoId);
-
-
-    if (!alumno || !conocido) {
-      throw new NotFoundException('Alumno o conocido no encontrado');
-    }
-
-    const payload = {
-      alumnoId: alumno.id,
-      conocidoId: conocido.id,
-      nombreConocido: conocido.nombre,
-      fotoConocido: conocido.foto,
-      nombreAlumno: alumno.nombre,
-      nombreTutor: alumno.tutor.nombre,
-      grupo: alumno.grupo
-        ? {
-          idGrupo: alumno.grupo.id,
-          nombreGrupo: alumno.grupo.nombre,
-        }
-        : null,
-    };
-
-    const token = this.jwtService.sign(payload, { expiresIn: '5m' });
-
-    return { token }; // Lo puedes usar para generar el QR en el front
-  }
+ 
 
   async obtenerDatosParaQR(tutorId: number, alumnoId: number) {
     const conocidos = await this.conocidosService.findByTutorId(tutorId);
@@ -60,6 +33,8 @@ export class QRService {
     return conocidos.map(k => ({
       idConocido: k.id,
       nombreConocido: k.nombre,
+      apellidoConocido: k.apellido,
+      parentesco:k.parentesco,
       fotoConocido: k.foto,
       alumno: {
         idAlumno: alumno.id,
