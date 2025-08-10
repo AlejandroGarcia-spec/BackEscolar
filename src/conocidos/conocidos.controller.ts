@@ -22,7 +22,7 @@ export class ConocidosController {
     return this.conocidosService.findOne(+id);
   }
 
-  @Get('conocidos/tutor/:tutorId')
+  @Get('tutor/:tutorId')
   findConocidosByTutor(@Param('tutorId') tutorId: number) {
     return this.conocidosService.findByTutorId(tutorId);
   }

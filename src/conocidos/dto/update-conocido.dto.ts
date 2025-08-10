@@ -11,6 +11,10 @@ export class UpdateConocidoDto {
   @IsOptional()
   apellido?: string;
 
+  @IsString()
+  @IsOptional()
+  parentesco?: string;
+
   @IsInt()
   @IsOptional()
   tutorId?: number;

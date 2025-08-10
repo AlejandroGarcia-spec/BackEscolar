@@ -11,6 +11,9 @@ export class Conocido {
     
     @Column()
     apellido: string;
+
+    @Column()
+    parentesco: string;
     
     @ManyToOne(() => Tutore, (tutore) => tutore.conocido)
     tutor: Tutore

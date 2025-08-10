@@ -9,11 +9,15 @@ export class CreateConocidoDto {
   @IsNotEmpty()
   apellido: string;
 
+  @IsString()
+  @IsNotEmpty()
+  parentesco: string;
+
   @IsInt()
   @IsNotEmpty()
   tutorId: number;
 
   @IsString()
-  @IsOptional()
-  foto?: string;
+  @IsNotEmpty()
+  foto: string;
 }
