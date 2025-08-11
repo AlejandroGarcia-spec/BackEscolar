@@ -30,7 +30,7 @@ export class GruposService {
   async remove(id: number): Promise<string> {
     const grupo = await this.grupoRepository.findOne({
       where: { id },
-      relations: ['alumnos', 'maestros'], // Asegúrate que están bien nombradas
+      relations: ['alumnos', 'maestros'],
     });
 
     if (!grupo) {
