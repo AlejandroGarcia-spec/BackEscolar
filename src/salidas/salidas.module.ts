@@ -8,5 +8,7 @@ import { Salida } from './entities/salida.entity';
   controllers: [SalidasController],
   providers: [SalidasService],
   imports: [TypeOrmModule.forFeature([Salida])],
+  exports: [SalidasService, TypeOrmModule]
+
 })
 export class SalidasModule {}

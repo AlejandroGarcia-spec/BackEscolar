@@ -44,4 +44,10 @@ export class EntradasController {
   findByGrupo(@Param('grupoId') grupoId: string) {
     return this.entradasService.findByGrupoId(+grupoId);
   }
+
+
+  @Get('hijos/:tutorId')
+  async obtenerEntradasHijos(@Param('tutorId') tutorId: number) {
+    return this.entradasService.obtenerEntradasPorTutor(tutorId);
+  }
 }
