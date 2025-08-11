@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Salida } from './entities/salida.entity';
@@ -17,12 +17,27 @@ export class SalidasService {
     return this._salidaRepo.save(salida);
   }
 
-  findAll() {
-    return this._salidaRepo.find();
+  
+  async findAll() {
+    return this._salidaRepo.find({
+      relations: ['alumno', 'alumno.grupo'], 
+      order: {
+        Date: 'DESC' 
+      }
+    });
   }
 
-  findOne(id: number) {
-    return this._salidaRepo.findOne({ where: { id } });
+  async findOne(id: number) {
+    const salida = await this._salidaRepo.findOne({
+      where: { id },
+      relations: ['alumno', 'alumno.grupo'] 
+    });
+    
+    if (!salida) {
+      throw new NotFoundException('Salida no encontrada');
+    }
+    
+    return salida;
   }
 
   update(id: number, updateSalidaDto: UpdateSalidaDto) {
