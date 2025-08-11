@@ -13,7 +13,7 @@ import { UpdateEntradaDto } from './dto/update-entrada.dto';
 
 @Controller('entradas')
 export class EntradasController {
-  constructor(private readonly entradasService: EntradasService) {}
+  constructor(private readonly entradasService: EntradasService) { }
 
   @Post('new')
   create(@Body() createEntradaDto: CreateEntradaDto) {
@@ -38,5 +38,10 @@ export class EntradasController {
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.entradasService.remove(+id);
+  }
+
+  @Get('grupo/:grupoId')
+  findByGrupo(@Param('grupoId') grupoId: string) {
+    return this.entradasService.findByGrupoId(+grupoId);
   }
 }

@@ -18,7 +18,7 @@ export class EntradasService {
 
     @InjectRepository(Alummno)
     private readonly alumnoRepo: Repository<Alummno>,
-  ) {}
+  ) { }
 
   async create(createEntradaDto: CreateEntradaDto) {
     const alumno = await this.alumnoRepo.findOne({
@@ -55,6 +55,21 @@ export class EntradasService {
 
   findOne(id: number) {
     return this.entradaRepo.findOne({ where: { id }, relations: ['alumno'] });
+  }
+
+  async findByGrupoId(grupoId: number) {
+    const inicioDia = new Date();
+    inicioDia.setHours(0, 0, 0, 0);
+    const finDia = new Date();
+    finDia.setHours(23, 59, 59, 999);
+
+    return this.entradaRepo.find({
+      where: {
+        alumno: { grupoId: grupoId },
+        DateEntrada: Between(inicioDia, finDia),
+      },
+      relations: ['alumno'],
+    });
   }
 
   async update(id: number, updateEntradaDto: UpdateEntradaDto) {
