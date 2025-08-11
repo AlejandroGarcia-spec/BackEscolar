@@ -41,9 +41,13 @@ export class TutoresService {
     }
     return null;
   }
-  async findByCorreo(correo: string): Promise<Tutore | null> {
-    return await this.tutoreRepository.findOne({ where: { correo } });
-  }
+async findByCorreo(correo: string): Promise<Tutore | null> {
+  return await this.tutoreRepository.findOne({
+    where: { correo },
+    relations: ['alumno', 'alumno.grupo'],
+  });
+}
+
   findAllWithAlumnos(): Promise<Tutore[]> {
     return this.tutoreRepository.find({
       relations: ['alumno'],
