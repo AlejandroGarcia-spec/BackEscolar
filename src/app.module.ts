@@ -15,14 +15,14 @@ import { QrModule } from './qr/qr.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'mysql.railway.internal',
-      port: 3306,
-      username: 'root',
-      password: 'HCWYmInGybXzChFAwuzvRFGJzrOVNutu',
-      database: 'railway',
-      synchronize: true,
-      autoLoadEntities: true,
+     type: 'mysql',
+    host: 'localhost',
+    port: 3306,
+    username: 'root',
+    password: '',
+    database: 'escuelita2',
+    synchronize: true,
+    autoLoadEntities: true,
     }),
     GruposModule,
     TutoresModule,
