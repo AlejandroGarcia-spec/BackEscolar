@@ -11,8 +11,8 @@ export class CreateMaestroDto {
   apellido: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  telefono: number;
+  @IsString()
+  telefono: string;
 
   @IsString()
   @IsNotEmpty()

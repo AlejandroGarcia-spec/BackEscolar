@@ -19,8 +19,8 @@ export class UpdateMaestroDto {
   apellido: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  telefono: number;
+  @IsString()
+  telefono: string;
 
   @IsString()
   @IsNotEmpty()

@@ -10,8 +10,8 @@ export class CreateTutoreDto {
   apellido: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  telefono: number;
+  @IsString()
+  telefono: string;
   @IsString()
   @IsNotEmpty()
   correo: string;
