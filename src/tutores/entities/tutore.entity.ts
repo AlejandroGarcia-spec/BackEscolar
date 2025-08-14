@@ -20,7 +20,7 @@ export class Tutore {
   apellido: string;
 
   @Column()
-  telefono: number;
+  telefono: string;
 
   @Column()
   parentesco: string;

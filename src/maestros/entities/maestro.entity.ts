@@ -19,7 +19,7 @@ export class Maestro {
   apellido: string;
 
   @Column()
-  telefono: number;
+  telefono: string;
 
   @Column()
   correo: string;
