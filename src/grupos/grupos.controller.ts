@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { GruposService } from './grupos.service';
 import { CreateGrupoDto } from './dto/create-grupo.dto';
 import { UpdateGrupoDto } from './dto/update-grupo.dto';
@@ -28,7 +28,9 @@ export class GruposController {
   }
 
   @Delete('delete/:id')
-  remove(@Param('id') id: string) {
-    return this.gruposService.remove(+id);
+  @HttpCode(HttpStatus.OK)
+  async remove(@Param('id') id: string) {
+    const mensaje = await this.gruposService.remove(+id);
+    return { message: mensaje };
   }
 }
